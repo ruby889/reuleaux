@@ -17,6 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 find_package(octomap REQUIRED)
+find_package(HDF5 REQUIRED COMPONENTS C CXX)
 
 add_message_files(
  FILES
@@ -24,7 +25,7 @@ add_message_files(
  capability.msg
  WsSphere.msg
  WorkSpace.msg
- 
+
 )
 
 generate_messages(
@@ -41,7 +42,7 @@ catkin_package(
     kinematics
     hdf5_dataset
     roscpp
-  CATKIN_DEPENDS message_runtime 
+  CATKIN_DEPENDS message_runtime
 )
 
 include_directories(include ${catkin_INCLUDE_DIRS} ${OCTOMAP_INCLUDE_DIRS} ${HDF5_INCLUDE_DIR} ${PCL_INCLUDE_DIR})
@@ -52,12 +53,12 @@ add_library(hdf5_dataset  src/hdf5_dataset.cpp)
 
 target_link_libraries(sphere_discretization  ${catkin_LIBRARIES} ${OCTOMAP_LIBRARIES} ${PCL_LIBRARY_DIRS})
 target_link_libraries(kinematics  ${catkin_LIBRARIES} -llapack)
-target_link_libraries(hdf5_dataset  ${catkin_LIBRARIES} -lhdf5 -lhdf5_cpp)
+target_link_libraries(hdf5_dataset  ${catkin_LIBRARIES} ${HDF5_CXX_LIBRARIES} ${HDF5_LIBRARIES})
 
 install(TARGETS sphere_discretization kinematics hdf5_dataset
  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
- 
+
 )
 
 install(DIRECTORY include/${PROJECT_NAME}/
